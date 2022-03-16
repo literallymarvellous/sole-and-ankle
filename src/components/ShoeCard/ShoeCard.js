@@ -5,6 +5,24 @@ import { COLORS, WEIGHTS } from "../../constants";
 import { formatPrice, pluralize, isNewShoe } from "../../utils";
 import Spacer from "../Spacer";
 
+const VARIANTS = {
+  "new-release": {
+    "--backgroundColor": COLORS.secondary,
+    "--color": COLORS.white,
+    detail: "Just released",
+  },
+  "on-sale": {
+    "--backgroundColor": COLORS.primary,
+    "--color": COLORS.white,
+    detail: "Sale",
+  },
+  default: {
+    "--backgroundColor": "inherit",
+    "--color": "inherit",
+    detail: "",
+  },
+};
+
 const ShoeCard = ({
   slug,
   name,
@@ -31,6 +49,8 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
+  const styles = VARIANTS[variant];
+
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
@@ -45,6 +65,8 @@ const ShoeCard = ({
         <Row>
           <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
         </Row>
+
+        <PriceDetail style={styles}>{styles.detail}</PriceDetail>
       </Wrapper>
     </Link>
   );
@@ -53,10 +75,12 @@ const ShoeCard = ({
 const Link = styled.a`
   text-decoration: none;
   color: inherit;
-  flex: 1 1 200px;
+  flex: 1 1 300px;
 `;
 
-const Wrapper = styled.article``;
+const Wrapper = styled.article`
+  position: relative;
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
@@ -68,6 +92,8 @@ const Image = styled.img`
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -84,6 +110,18 @@ const ColorInfo = styled.p`
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.primary};
+`;
+
+const PriceDetail = styled.div`
+  position: absolute;
+  top: 5%;
+  right: -2%;
+  width: fit-content;
+  z-index: 2;
+  color: var(--color);
+  background-color: var(--backgroundColor);
+  padding: 6px 10px;
+  font-size: ${14 / 16}rem;
 `;
 
 export default ShoeCard;
